@@ -1,10 +1,10 @@
 import './App.css';
-import { Button } from 'antd';
+import WeChat from "./pages/WeChat";
 
 function App() {
   return (
     <div className="App">
-       <Button type="primary">Button</Button>
+        <WeChat />
     </div>
   );
 }
