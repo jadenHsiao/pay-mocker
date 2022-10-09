@@ -1,9 +1,13 @@
 import React from "react";
 import {
     AlipayCircleOutlined,
-    WechatOutlined
+    WechatOutlined,
+    createFromIconfontCN
 } from '@ant-design/icons';
 
+const IconFont = createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/c/font_3225718_siv6fv3cxdo.js',
+});
 
 /**
  * 菜单列表
@@ -22,7 +26,7 @@ export const Menu = [
     },
     {
         key: '3',
-        icon: <AlipayCircleOutlined />,
+        icon: <IconFont type="icon-paypal" />,
         label: 'PayPal 支付回调',
     },
 ];

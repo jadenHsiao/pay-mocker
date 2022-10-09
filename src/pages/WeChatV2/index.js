@@ -110,12 +110,12 @@ class WeChatV2 extends React.Component
             state.totalFee = state.totalFee * 100;
         let content = signContent(fields,state),
             preSignContent = content.value + "&key=" + this.handleGetFieldValue("apiPrivateKey");
-        if("MD5" == signType){
+        if("MD5" === signType){
             sign = CryptoJS.MD5(preSignContent)
                 .toString()
                 .toUpperCase();
         }
-        if("HMAC-SHA256" == signType){
+        if("HMAC-SHA256" === signType){
             sign = CryptoJS.HmacSHA256(preSignContent, this.handleGetFieldValue("apiPrivateKey"))
                 .toString()
                 .toUpperCase();
@@ -143,7 +143,7 @@ class WeChatV2 extends React.Component
             <div className="we-chat">
                 { alertShow ?
                     <Alert
-                        message={successMark.toLowerCase() == alertType ? "成功" : "错误"}
+                        message={successMark.toLowerCase() === alertType ? "成功" : "错误"}
                         description={alertContent}
                         type={alertType}
                         showIcon />
@@ -182,7 +182,7 @@ class WeChatV2 extends React.Component
                                 validator(_,value){
                                     let url = getFieldValue("callBackUrl"),
                                         regexResult = url.search(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/i)
-                                    if(-1 !=regexResult) {
+                                    if(-1 !== regexResult) {
                                         return Promise.resolve();
                                     }
                                     return Promise.reject(new Error("请输入有效的 URL 地址"));

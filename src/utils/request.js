@@ -32,7 +32,7 @@ var response = {
  * @returns {{code: number, message: *}}
  */
 function errorHandler(error){
-    if("ERR_NETWORK" == error.code){
+    if("ERR_NETWORK" === error.code){
         response.code = 1;
         response.message = errorContent["1"];
         return response;
