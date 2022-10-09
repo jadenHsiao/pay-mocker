@@ -9,7 +9,7 @@ import React from "react";
 import CryptoJS from "crypto-js";
 import { Button, Radio , Form, Input, Alert  } from 'antd';
 import { post } from "../../utils/request";
-import { signContent, getFieldValue } from "../../utils/string";
+import { signContent } from "../../utils/string";
 
 const successMark = "SUCCESS";
 
@@ -140,7 +140,7 @@ class WeChat extends React.Component
             <div className="we-chat">
                 { alertShow ?
                     <Alert
-                        message="错误"
+                        message={successMark.toLowerCase() == alertType ? "成功" : "错误"}
                         description={alertContent}
                         type={alertType}
                         showIcon />

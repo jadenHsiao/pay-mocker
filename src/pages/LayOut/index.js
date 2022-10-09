@@ -41,7 +41,7 @@ class LayOut extends React.Component
                             {
                                 key: '3',
                                 icon: <AlipayCircleOutlined />,
-                                label: 'nav 3',
+                                label: 'PayPal 支付回调',
                             },
                         ]}
                     />
