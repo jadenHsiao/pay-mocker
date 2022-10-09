@@ -11,7 +11,7 @@ import { Button, Radio , Form, Input, Alert   } from 'antd';
 import { post } from "../../utils/request";
 import { signContent } from "../../utils/string";
 
-const successMark = "success";
+const successMark = "SUCCESS";
 
 class WeChat extends React.Component
 {
@@ -23,7 +23,7 @@ class WeChat extends React.Component
         this.state = {
             alertShow:false,
             alertContent:"",
-            alertType:successMark,
+            alertType:successMark.toLowerCase(),
             form:{
                 apiPrivateKey:"",
                 callBackUrl:"",

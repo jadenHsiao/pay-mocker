@@ -29,6 +29,7 @@ export function signContent(fields,state){
         params[key] = "application/xml; charset=utf-8";
     });
     keys.sort();
+    console.log(keys);
     keys.forEach((item,index) => {
         if(index > 0){
             content += "&";
