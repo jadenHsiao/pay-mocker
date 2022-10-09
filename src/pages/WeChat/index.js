@@ -113,9 +113,7 @@ class WeChat extends React.Component
                 .toUpperCase();
         }
         if("HMAC-SHA256" == signType){
-            sign = CryptoJS.algo.HMAC
-                .create(CryptoJS.algo.SHA256,preSignContent)
-                .finalize()
+            sign = CryptoJS.HmacSHA256(preSignContent, this.handleGetFieldValue("apiPrivateKey"))
                 .toString()
                 .toUpperCase();
         }
