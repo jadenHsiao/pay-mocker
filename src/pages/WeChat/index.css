@@ -1,1 +1,10 @@
 @import '~antd/dist/antd.css';
+
+.we-chat{
+    background-color: white;
+    padding-bottom: 40px;
+}
+
+.ant-btn:first-child {
+    margin-right: 8px;
+}

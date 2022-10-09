@@ -1,10 +1,11 @@
 import './App.css';
-import WeChat from "./pages/WeChat";
+
+import LayOut from "./pages/LayOut";
 
 function App() {
   return (
     <div className="App">
-        <WeChat />
+        <LayOut />
     </div>
   );
 }
