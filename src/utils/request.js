@@ -1,3 +1,9 @@
+/**
+ * @Description: 网络请求工具函数
+ * @author Jaden hsiao
+ * @link https://www.jytype.cn
+ * @date 2022/10/4
+ */
 import axios from "axios";
 
 /**

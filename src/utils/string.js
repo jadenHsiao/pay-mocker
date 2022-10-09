@@ -1,4 +1,11 @@
 /**
+ * @Description: 字符串工具函数
+ * @author Jaden hsiao
+ * @link https://www.jytype.cn
+ * @date 2022/10/4
+ */
+
+/**
  * 驼峰变量名转下划线
  * @param str
  * @returns {*}
