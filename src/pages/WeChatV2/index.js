@@ -13,7 +13,10 @@ import { signContent } from "../../utils/string";
 
 const successMark = "SUCCESS";
 
-class WeChat extends React.Component
+/**
+ * 微信支付（`V2`）版本支付模拟组件
+ */
+class WeChatV2 extends React.Component
 {
 
     formRef = React.createRef();
@@ -302,4 +305,4 @@ class WeChat extends React.Component
 
 }
 
-export default WeChat;
+export default WeChatV2;

@@ -1,20 +1,27 @@
+/**
+ * @Description: 模板组件
+ * @author Jaden hsiao
+ * @link https://www.jytype.cn
+ * @date 2022/10/4
+ */
 import "./index.css";
 import React from "react";
-import WeChat from "../WeChat";
+import WeChat from "../WeChatV2";
 import { Breadcrumb, Layout, Menu } from 'antd';
-import {
-    AlipayCircleOutlined,
-    WechatOutlined,
-    VideoCameraOutlined,
-} from '@ant-design/icons';
-const { Sider, Header, Content, Footer } = Layout;
+import { Menu as menuList } from "../../core/menu";
+const { Sider, Content, Footer } = Layout;
 
-
+/**
+ * 模板组件
+ */
 class LayOut extends React.Component
 {
 
     constructor(props){
         super(props);
+        this.state = {
+            menuList
+        };
     }
 
     render(){
@@ -27,23 +34,7 @@ class LayOut extends React.Component
                         theme="dark"
                         mode="inline"
                         defaultSelectedKeys={['1']}
-                        items={[
-                            {
-                                key: '1',
-                                icon: <WechatOutlined />,
-                                label: '微信支付回调（V2）',
-                            },
-                            {
-                                key: '2',
-                                icon: <AlipayCircleOutlined />,
-                                label: '支付宝支付回调',
-                            },
-                            {
-                                key: '3',
-                                icon: <AlipayCircleOutlined />,
-                                label: 'PayPal 支付回调',
-                            },
-                        ]}
+                        items={menuList}
                     />
                 </Sider>
                 <Layout className="site-layout">
