@@ -7,9 +7,9 @@
 import "./index.css";
 import React from "react";
 import CryptoJS from "crypto-js";
-import { Button, Radio , Form, Input, Alert   } from 'antd';
+import { Button, Radio , Form, Input, Alert  } from 'antd';
 import { post } from "../../utils/request";
-import { signContent } from "../../utils/string";
+import { signContent, getFieldValue } from "../../utils/string";
 
 const successMark = "SUCCESS";
 
@@ -39,6 +39,17 @@ class WeChat extends React.Component
     }
 
     /**
+     * 根据字段获取表单的值
+     * @param fields
+     * @returns {*}
+     */
+    handleGetFieldValue = (fields) => {
+        let formData = this.formRef.current.getFieldsValue(),
+            value = formData[fields];
+        return value;
+    };
+
+    /**
      * 发起回调请求
      * @returns {Promise<void>}
      */
@@ -46,7 +57,7 @@ class WeChat extends React.Component
         await this.formRef.current.validateFields()
             .then((values) => {
                 let that = this,
-                    url = that.formRef.current.getFieldsValue().callBackUrl,
+                    url = that.handleGetFieldValue("callBackUrl"),
                     state = that.state,
                     alertContent = state.alertContent,
                     alertType = state.alertType,
@@ -60,7 +71,7 @@ class WeChat extends React.Component
                 post(url,xml,headers)
                     .then((value)=>{
                         alertContent = value.message;
-                        alertType = successMark;
+                        alertType = successMark.toLowerCase();
                     })
                     .catch((error)=>{
                         alertContent = error.message;
@@ -92,9 +103,10 @@ class WeChat extends React.Component
             sign = "",
             xml = "",
             state = values,
-            signType = values.signType,
-            content = signContent(fields,state),
-            preSignContent = content.value + "&key=" + this.state.form.apiPrivateKey;
+            signType = values.signType;
+            state.totalFee = state.totalFee * 100;
+        let content = signContent(fields,state),
+            preSignContent = content.value + "&key=" + this.handleGetFieldValue("apiPrivateKey");
         if("MD5" == signType){
             sign = CryptoJS.MD5(preSignContent)
                 .toString()
@@ -109,9 +121,6 @@ class WeChat extends React.Component
         }
         content.keys.forEach((item,index) => {
             let currentValue = content.params[item];
-            if("total_fee" == item){
-                currentValue *= 100;
-            }
             xml+="<"+item+"><![CDATA["+currentValue+"]]></"+item+">";
         });
         xml+="<sign><![CDATA["+sign+"]]></sign>";

@@ -26,10 +26,9 @@ export function signContent(fields,state){
     fields.forEach((item,index) => {
         let key = toLowerLine(item);
         keys.push(key);
-        params[key] = "application/xml; charset=utf-8";
+        params[key] = state[item];
     });
     keys.sort();
-    console.log(keys);
     keys.forEach((item,index) => {
         if(index > 0){
             content += "&";
@@ -42,3 +41,4 @@ export function signContent(fields,state){
         params
     };
 }
+
