@@ -10,8 +10,7 @@ import CryptoJS from "crypto-js";
 import { Button, Radio , Form, Input, Alert  } from 'antd';
 import { post } from "../../utils/request";
 import { signContent } from "../../utils/string";
-
-const successMark = "SUCCESS";
+import { successMark } from "../../core/constant";
 
 /**
  * 微信支付（`V2`）版本支付模拟组件
