@@ -15,7 +15,7 @@ import { successMark } from "../../core/constant";
 /**
  * 微信支付（`V2`）版本支付模拟组件
  */
-class WeChatV2 extends React.Component
+class WeChatPayV2 extends React.Component
 {
 
     formRef = React.createRef();
@@ -304,4 +304,4 @@ class WeChatV2 extends React.Component
 
 }
 
-export default WeChatV2;
+export default WeChatPayV2;

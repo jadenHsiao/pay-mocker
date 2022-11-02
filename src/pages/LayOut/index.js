@@ -6,7 +6,8 @@
  */
 import "./index.css";
 import React from "react";
-import WeChat from "../WeChatV2";
+import WeChat from "../WeChatPayV2";
+import QPay from "../QPay"
 import { Breadcrumb, Layout, Menu } from 'antd';
 import { Menu as menuList } from "../../core/menu";
 const { Sider, Content, Footer } = Layout;
@@ -37,7 +38,7 @@ class LayOut extends React.Component
                         items={menuList}
                     />
                 </Sider>
-                <Layout className="site-layout">
+                <QPay className="site-layout">
                 <Content
                     className="site-layout"
                     style={{
@@ -78,7 +79,7 @@ class LayOut extends React.Component
                 >
                     Jadenhsiao ©2022 Created by Ant Design
                 </Footer>
-            </Layout>
+            </QPay>
             </Layout>
         );
     }
