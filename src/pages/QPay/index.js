@@ -32,7 +32,9 @@ class QPay extends React.Component
                 outTradeNo:"",
                 transactionId:"",
                 bankType:"",
-
+                feeType:"CNY",
+                cashFee:0.01,
+                timeEnd:"",
                 totalFee:0.01,
                 returnCode:successMark,
                 resultCode:successMark,
