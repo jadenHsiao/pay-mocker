@@ -49,3 +49,17 @@ export function signContent(fields,state){
     };
 }
 
+/**
+ * 生成随机字符串
+ * @param e
+ * @returns {string|string}
+ */
+export function randomString(e) {
+    e = e || 32;
+    var t = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678",
+        a = t.length,
+        n = "";
+    for (let i = 0; i < e; i++)
+        n += t.charAt(Math.floor(Math.random() * a));
+    return n
+}

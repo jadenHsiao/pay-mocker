@@ -38,7 +38,6 @@ class LayOut extends React.Component
                         items={menuList}
                     />
                 </Sider>
-                <QPay className="site-layout">
                 <Content
                     className="site-layout"
                     style={{
@@ -69,17 +68,17 @@ class LayOut extends React.Component
                     </Layout>
                     <div
                         className="site-layout-background">
-                        <WeChat />
+                        <QPay />
                     </div>
+                    <Footer
+                        style={{
+                            textAlign: 'center',
+                        }}
+                    >
+                        Jadenhsiao ©2022 Created by Ant Design
+                    </Footer>
                 </Content>
-                <Footer
-                    style={{
-                        textAlign: 'center',
-                    }}
-                >
-                    Jadenhsiao ©2022 Created by Ant Design
-                </Footer>
-            </QPay>
+
             </Layout>
         );
     }

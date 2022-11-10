@@ -9,7 +9,7 @@ import React from "react";
 import CryptoJS from "crypto-js";
 import { Button, Radio , Form, Input, Alert  } from 'antd';
 import { post } from "../../utils/request";
-import { signContent } from "../../utils/string";
+import { signContent,randomString } from "../../utils/string";
 import { successMark } from "../../core/constant";
 
 /**
@@ -27,6 +27,7 @@ class QPay extends React.Component
             alertContent:"",
             alertType:successMark.toLowerCase(),
             form:{
+                mchId:"",
                 apiPrivateKey:"",
                 callBackUrl:"",
                 outTradeNo:"",
@@ -36,10 +37,10 @@ class QPay extends React.Component
                 cashFee:0.01,
                 timeEnd:"",
                 totalFee:0.01,
-                returnCode:successMark,
-                resultCode:successMark,
+                tradeState:successMark,
                 tradeType:"JSAPI",
-                attach:successMark
+                attach:successMark,
+                nonceStr:randomString(32)
             }
         }
     }
@@ -102,27 +103,17 @@ class QPay extends React.Component
      */
     handleNotifyXML = (values) => {
         let fields = [
-                "outTradeNo","transactionId",
-                "totalFee","returnCode",
-                "resultCode","attach"
+                "outTradeNo","transactionId","bankType",
+                "feeType","cashFee","timeEnd","tradeType",
+                "totalFee","tradeState","attach","mchId"
             ],
-            sign = "",
             xml = "",
-            state = values,
-            signType = values.signType;
+            state = values;
             state.totalFee = state.totalFee * 100;
+            state.cashFee = state.cashFee * 100;
         let content = signContent(fields,state),
-            preSignContent = content.value + "&key=" + this.handleGetFieldValue("apiPrivateKey");
-        if("MD5" === signType){
-            sign = CryptoJS.MD5(preSignContent)
-                .toString()
-                .toUpperCase();
-        }
-        if("HMAC-SHA256" === signType){
-            sign = CryptoJS.HmacSHA256(preSignContent, this.handleGetFieldValue("apiPrivateKey"))
-                .toString()
-                .toUpperCase();
-        }
+            preSignContent = content.value + "&key=" + this.handleGetFieldValue("apiPrivateKey"),
+            sign = CryptoJS.MD5(preSignContent).toString().toUpperCase();
         content.keys.forEach((item,index) => {
             let currentValue = content.params[item];
             xml+="<"+item+"><![CDATA["+currentValue+"]]></"+item+">";
@@ -143,7 +134,7 @@ class QPay extends React.Component
         const { alertShow,alertContent,form,alertType } = this.state;
 
         return (
-            <div className="we-chat">
+            <div className="q-pay">
                 { alertShow ?
                     <Alert
                         message={successMark.toLowerCase() === alertType ? "成功" : "错误"}
@@ -159,17 +150,17 @@ class QPay extends React.Component
                       initialValues={form}
                       style={{paddingTop:"40px"}}
                       autoComplete="off">
-                    {/* description:微信支付商户的`API`秘钥 */}
+                    {/* description:QQ钱包商户的`API`秘钥 */}
                     <Form.Item
                         label="API 秘钥"
                         name="apiPrivateKey"
                         rules={[
                             {
                                 required:true,
-                                message:"请输入微信支付秘钥"
+                                message:"请输入QQ钱包秘钥"
                             }
                         ]}>
-                        <Input placeholder="请输入微信支付秘钥" />
+                        <Input placeholder="请输入QQ钱包秘钥" />
                     </Form.Item>
                     {/* description:支付回调地址 */}
                     <Form.Item
@@ -194,6 +185,19 @@ class QPay extends React.Component
                         ]}>
                         <Input placeholder="请输入支付回调地址" />
                     </Form.Item>
+                    {/* description:商户号 */}
+                    <Form.Item
+                        label="商户号"
+                        name="mchId"
+                        extra="QQ钱包分配的商户号"
+                        rules={[
+                            {
+                                required:true,
+                                message:"请输入商户号"
+                            }
+                        ]}>
+                        <Input placeholder="请输入商户号"  />
+                    </Form.Item>
                     {/* description:商户订单号 */}
                     <Form.Item
                         label="商户订单号"
@@ -207,18 +211,44 @@ class QPay extends React.Component
                         ]}>
                         <Input placeholder="请输入商户订单号"  />
                     </Form.Item>
-                    {/* description:微信支付订单号 */}
+                    {/* description:货币类型 */}
                     <Form.Item
-                        label="微信支付订单号"
+                        label="货币类型"
+                        name="feeType"
+                        extra="默认为人民币：CNY"
+                        rules={[
+                            {
+                                required:true,
+                                message:"请输入货币类型"
+                            }
+                        ]}>
+                        <Input placeholder="请输入货币类型"  />
+                    </Form.Item>
+                    {/* description:付款银行 */}
+                    <Form.Item
+                        label="付款银行"
+                        name="bankType"
+                        extra="银行类型，采取字符串类型的银行卡标识"
+                        rules={[
+                            {
+                                required:true,
+                                message:"请输入付款银行"
+                            }
+                        ]}>
+                        <Input placeholder="请输入付款银行"  />
+                    </Form.Item>
+                    {/* description:QQ钱包订单号 */}
+                    <Form.Item
+                        label="QQ钱包订单号"
                         name="transactionId"
                         extra="API 接口字段为`trade_no`"
                         rules={[
                             {
                                 required:true,
-                                message:"请输入微信支付订单号"
+                                message:"请输入QQ钱包订单号"
                             }
                         ]}>
-                        <Input placeholder="请输入微信支付订单号"  />
+                        <Input placeholder="请输入QQ钱包订单号"  />
                     </Form.Item>
                     {/* description:本次交易的订单金额，币种为人民币 */}
                     <Form.Item
@@ -241,51 +271,60 @@ class QPay extends React.Component
                         ]}>
                         <Input prefix="￥" suffix="RMB"  type="number" placeholder="请输入订单金额"  />
                     </Form.Item>
-                    {/* description:交易状态 */}
+                    {/* description:用户支付金额，币种为人民币 */}
                     <Form.Item
-                        label="交易状态"
-                        name="returnCode"
-                        extra="本次交易的交易状态，字段为`return_code`"
+                        label="用户支付金额"
+                        name="cashFee"
+                        extra="用户支付金额，币种为人民币，单位为元"
                         rules={[
                             {
                                 required:true,
-                                message:"请输入交易状态"
-                            }
+                                message:"请输入用户支付金额"
+                            },
+                            ({getFieldValue}) => ({
+                                validator(_,value){
+                                    if(!value || getFieldValue("cashFee") > 0.00){
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error("用户支付金额不能小于0.01元！"))
+                                }
+                            })
                         ]}>
-                        <Input placeholder="请输入交易状态" />
+                        <Input prefix="￥" suffix="RMB"  type="number" placeholder="请输入用户支付金额"  />
                     </Form.Item>
-                    {/* description:交易结果 */}
+                    {/* description:支付完成时间 */}
                     <Form.Item
-                        label="交易结果"
-                        name="resultCode"
-                        extra="本次交易的交易结果，字段为`result_code`"
+                        label="支付完成时间"
+                        name="timeEnd"
+                        extra="订单支付时间，格式为yyyyMMddHHmmss，如果为2022年9月25日9点10分10秒为20220925091010"
                         rules={[
                             {
                                 required:true,
-                                message:"请输入交易结果"
+                                message:"支付完成时间"
                             }
                         ]}>
-                        <Input placeholder="请输入交易结果" />
+                        <Input placeholder="请输入支付完成时间" />
+                    </Form.Item>
+                    {/* description:支付状态 */}
+                    <Form.Item
+                        label="支付状态"
+                        name="tradeState"
+                        extra="本次交易的支付状态">
+                        <Input disabled={true}/>
                     </Form.Item>
                     {/* description:商家数据包，原样返回 */}
                     <Form.Item
                         label="商家数据包"
                         name="attach"
-                        extra="商家数据包，字段为`attach`"
-                        rules={[
-                            {
-                                required:true,
-                                message:"商家数据包"
-                            }
-                        ]}>
+                        extra="商家数据包，字段为`attach`">
                         <Input placeholder="请输入商家数据包" />
                     </Form.Item>
                     {/* description:支付场景 */}
                     <Form.Item
                         label="支付场景"
-                        name="signType"
+                        name="tradeType"
                     >
-                        <Radio.Group defaultValue="MD5">
+                        <Radio.Group defaultValue="MICROPAY">
                             <Radio.Button value="MICROPAY">MICROPAY</Radio.Button>
                             <Radio.Button value="APP">APP</Radio.Button>
                             <Radio.Button value="JSAPI">JSAPI</Radio.Button>
