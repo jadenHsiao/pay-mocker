@@ -8,6 +8,7 @@ import "./index.css";
 import React from "react";
 import WeChat from "../WeChatPayV2";
 import QPay from "../QPay"
+import ByteDance from "../ByteDance";
 import { Breadcrumb, Layout, Menu } from 'antd';
 import { Menu as menuList } from "../../core/menu";
 const { Sider, Content, Footer } = Layout;
@@ -68,7 +69,7 @@ class LayOut extends React.Component
                     </Layout>
                     <div
                         className="site-layout-background">
-                        <QPay />
+                        <ByteDance />
                     </div>
                     <Footer
                         style={{

@@ -21,7 +21,7 @@ export function toLowerLine(str){
 }
 
 /**
- * 获取预签名内容
+ * 获取预签名内容（适用于微信支付`v2`版本和`QQ`钱包）
  * @param fields
  * @param state
  * @returns {{params, content: string, key: *}}
