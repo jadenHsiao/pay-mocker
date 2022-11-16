@@ -8,8 +8,8 @@ import "./index.css";
 import React from "react";
 import {Alert, Button, DatePicker, Form, Input, Radio} from "antd";
 import moment from "moment";
+import { successMark,urlRegex } from "../../core/constant";
 
-const successMark = "SUCCESS";
 
 /**
  * 字节跳动担保支付模拟组件
@@ -65,7 +65,8 @@ class ByteDance extends React.Component
     handleConfirmTime = (val) => {
         let form = this.state.form;
         form.timestamp = moment(val).unix();
-        this.state.setState({
+        console.log(form);
+        this.setState({
             form
         });
     };
@@ -132,7 +133,7 @@ class ByteDance extends React.Component
                             ({getFieldValue}) => ({
                                 validator(_,value){
                                     let url = getFieldValue("callBackUrl"),
-                                        regexResult = url.search(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/i)
+                                        regexResult = url.search(urlRegex);
                                     if(-1 !== regexResult) {
                                         return Promise.resolve();
                                     }
@@ -255,19 +256,20 @@ class ByteDance extends React.Component
                     >
                         <Input placeholder="抖音侧订单号（`order_id`）" />
                     </Form.Item>
-                    {/* description:时间选择器 */}
-                    <Form.Item label="支付时间"
+                    {/* description:回调请求时间选择 */}
+                    <Form.Item label="回调请求时间"
                                rules={[
                                    {
                                        required:true,
-                                       message:"支付时间时必须选择的"
+                                       message:"回调请求时间必须选择的"
                                    },
                                    ({getFieldValue}) => ({
                                        validator(_,value){
-                                           if(!value || getFieldValue("timestamp").length > 0){
+                                           let timestamp = moment(getFieldValue("timestamp")).unix();
+                                           if(undefined !== timestamp){
                                                return Promise.resolve();
                                            }
-                                           return Promise.reject(new Error("请选择正确的支付日期！"))
+                                           return Promise.reject(new Error("请选择正确的回调请求时间！"))
                                        }
                                    })
                                ]}
@@ -275,9 +277,34 @@ class ByteDance extends React.Component
                         <DatePicker
                             showTime
                             format="YYYY-MM-DD HH:mm:ss"
-                            placeholder="请选择订单支付时间"
+                            placeholder="请选择回调请求时间"
                             onOk={this.handleConfirmTime}
-                            defaultValue={moment('00:00:00', 'HH:mm:ss')} />
+                        />
+                    </Form.Item>
+                    {/* description:支付时间选择 */}
+                    <Form.Item label="支付时间"
+                               rules={[
+                                   {
+                                       required:true,
+                                       message:"支付时间必须选择的"
+                                   },
+                                   ({getFieldValue}) => ({
+                                       validator(_,value){
+                                           let timestamp = moment(getFieldValue("paid_at")).unix();
+                                           if(undefined !== timestamp){
+                                               return Promise.resolve();
+                                           }
+                                           return Promise.reject(new Error("请选择正确的回调请求时间！"))
+                                       }
+                                   })
+                               ]}
+                               name="paid_at">
+                        <DatePicker
+                            showTime
+                            format="YYYY-MM-DD HH:mm:ss"
+                            placeholder="请选择回调请求时间"
+                            onOk={this.handleConfirmTime}
+                        />
                     </Form.Item>
                     {/* description:功能按钮区 */}
                     <Form.Item wrapperCol={{offset: 4, span: 14,}}>

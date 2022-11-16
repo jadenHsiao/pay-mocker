@@ -10,7 +10,7 @@ import CryptoJS from "crypto-js";
 import { Button, Radio , Form, Input, Alert  } from 'antd';
 import { post } from "../../utils/request";
 import { signContent,randomString } from "../../utils/string";
-import { successMark } from "../../core/constant";
+import { successMark,urlRegex } from "../../core/constant";
 
 /**
  * QQ钱包支付模拟组件
@@ -175,7 +175,7 @@ class QPay extends React.Component
                             ({getFieldValue}) => ({
                                 validator(_,value){
                                     let url = getFieldValue("callBackUrl"),
-                                        regexResult = url.search(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/i)
+                                        regexResult = url.search(urlRegex);
                                     if(-1 !== regexResult) {
                                         return Promise.resolve();
                                     }
