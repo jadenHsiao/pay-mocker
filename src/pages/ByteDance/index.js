@@ -25,6 +25,7 @@ class ByteDance extends React.Component
             alertShow:false,
             alertContent:"",
             alertType:successMark.toLowerCase(),
+            time_field:"",
             form:{
                 callBackUrl:"",
                 token:"",
@@ -63,12 +64,25 @@ class ByteDance extends React.Component
      * 时间选择器点击确定时修改`state`时间戳数据
      */
     handleConfirmTime = (val) => {
-        let form = this.state.form;
-        form.timestamp = moment(val).unix();
+        let that = this,
+            form = that.state.form,
+            time_field = that.state.time_field;
+        form[time_field] = moment(val).unix();
         console.log(form);
         this.setState({
             form
         });
+    };
+
+    /**
+     * 设置选中的时间字段
+     */
+    handleSetTimeField = (field) => {
+        let that = this;
+            that.setState({
+                time_field:field
+            });
+        console.log(that.state.time_field);
     };
 
     handleOnSend = () => {
