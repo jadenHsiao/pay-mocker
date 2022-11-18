@@ -6,9 +6,11 @@
  */
 import "./index.css";
 import React from "react";
+import CryptoJS from "crypto-js";
 import {Alert, Button, DatePicker, Form, Input, Radio} from "antd";
 import moment from "moment";
 import { successMark,urlRegex } from "../../core/constant";
+import { createNonce } from "../../utils/string"
 
 
 /**
@@ -25,7 +27,6 @@ class ByteDance extends React.Component
             alertShow:false,
             alertContent:"",
             alertType:successMark.toLowerCase(),
-            time_field:"",
             form:{
                 callBackUrl:"",
                 token:"",
@@ -53,6 +54,15 @@ class ByteDance extends React.Component
         }
     }
 
+    componentDidMount(){
+        let that = this,
+            form = that.state.form;
+            form.nonce = createNonce();
+        this.setState({
+           form
+        })
+    };
+
     /**
      * 重置表单内容
      */
@@ -63,11 +73,10 @@ class ByteDance extends React.Component
     /**
      * 时间选择器点击确定时修改`state`时间戳数据
      */
-    handleConfirmTime = (val) => {
+    handleConfirmTime = (val,field) => {
         let that = this,
-            form = that.state.form,
-            time_field = that.state.time_field;
-        form[time_field] = moment(val).unix();
+            form = that.state.form;
+        form[field] = moment(val).unix();
         console.log(form);
         this.setState({
             form
@@ -75,18 +84,51 @@ class ByteDance extends React.Component
     };
 
     /**
-     * 设置选中的时间字段
+     * 获取签名内容
      */
-    handleSetTimeField = (field) => {
-        let that = this;
-            that.setState({
-                time_field:field
-            });
-        console.log(that.state.time_field);
+    handleGetSignContent = () => {
+
+      let msgExceptFields = [
+          "nonce","timestamp","type",
+          "callBackUrl","token"
+      ],
+          filtered = [],
+          msg = {},
+          that = this,
+          form = that.state.form,
+          content = {
+             nonce: form.nonce,
+             timestamp: form.timestamp.toString(),
+          };
+
+      form.total_amount = form.total_amount * 100;
+      that.setState({
+          form
+      });
+
+      for (let key in form){
+          if(-1 !== msgExceptFields.indexOf(key)){
+              continue;
+          }
+          msg[key] = form[key];
+      }
+
+      content.msg = JSON.stringify(msg);
+
+      for(let key in content){
+          filtered.push(content[key]);
+      }
+      filtered.sort();
+      filtered.push(form.token);
+      content.msg_signature = CryptoJS.SHA1(filtered.join("")).toString();
+
+      return content;
+
     };
 
     handleOnSend = () => {
-
+        let result = this.handleGetSignContent();
+        console.log(result);
     };
 
     render() {
@@ -194,18 +236,6 @@ class ByteDance extends React.Component
                     >
                         <Input placeholder="请输入支付渠道侧单号（`channel_no`）" />
                     </Form.Item>
-                    {/* description:支付渠道侧单号 */}
-                    <Form.Item
-                        label="支付渠道侧单号"
-                        name="channel_no"
-                        rules={[
-                            {
-                                required:true,
-                                message:"请输入支付渠道侧单号（`channel_no`）"
-                            }
-                        ]}>
-                        <Input placeholder="请输入支付渠道侧单号（`channel_no`）" />
-                    </Form.Item>
                     {/* description:支付渠道侧PC单号，支付页面可见 */}
                     <Form.Item
                         label="支付渠道侧PC单号"
@@ -292,7 +322,9 @@ class ByteDance extends React.Component
                             showTime
                             format="YYYY-MM-DD HH:mm:ss"
                             placeholder="请选择回调请求时间"
-                            onOk={this.handleConfirmTime}
+                            onOk={
+                                (val)=>{this.handleConfirmTime(val,"timestamp")}
+                            }
                         />
                     </Form.Item>
                     {/* description:支付时间选择 */}
@@ -317,7 +349,9 @@ class ByteDance extends React.Component
                             showTime
                             format="YYYY-MM-DD HH:mm:ss"
                             placeholder="请选择回调请求时间"
-                            onOk={this.handleConfirmTime}
+                            onOk={
+                                (val)=>{this.handleConfirmTime(val,"paid_at")}
+                            }
                         />
                     </Form.Item>
                     {/* description:功能按钮区 */}

@@ -63,3 +63,17 @@ export function randomString(e) {
         n += t.charAt(Math.floor(Math.random() * a));
     return n
 }
+
+/**
+ * 创建一个随机值
+ * @param length integer 位数
+ * @returns {string}
+ */
+export function createNonce(length = 3){
+    let rand = "";
+    for(let i = 0; i < length; i++){
+        let num = Math.floor(Math.random() * 10);
+        rand += num;
+    }
+    return rand;
+}
