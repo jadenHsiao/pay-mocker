@@ -6,6 +6,7 @@
  */
 import "./index.css";
 import React from "react";
+import { Routes, Route, Link } from 'react-router-dom';
 import WeChat from "../WeChatPayV2";
 import QPay from "../QPay"
 import ByteDance from "../ByteDance";
@@ -36,8 +37,18 @@ class LayOut extends React.Component
                         theme="dark"
                         mode="inline"
                         defaultSelectedKeys={['1']}
-                        items={menuList}
-                    />
+                    >
+                        {menuList.map((item,index) => {
+                            return (
+                                <Menu.Item key={index}>
+                                    <Link to={item.route}>
+                                        {item.icon}
+                                        <span>{item.label}</span>
+                                    </Link>
+                                </Menu.Item>
+                            )
+                        })}
+                    </Menu>
                 </Sider>
                 <Content
                     className="site-layout"
@@ -69,7 +80,12 @@ class LayOut extends React.Component
                     </Layout>
                     <div
                         className="site-layout-background">
-                        <ByteDance />
+                        <Routes>
+                            <Route exact path="/" element={<WeChat />}></Route>
+                            <Route path="/q-pay" element={<QPay />}></Route>
+                            <Route path="/byte-dance" element={<ByteDance />}></Route>
+                            <Route path="/we-chat-v2" element={<WeChat />}></Route>
+                        </Routes>
                     </div>
                     <Footer
                         style={{

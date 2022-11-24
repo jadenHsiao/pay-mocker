@@ -19,16 +19,19 @@ export const Menu = [
         key: '1',
         icon: <WechatOutlined />,
         label: '微信支付通知（V2）',
+        route: 'we-chat-v2'
     },
     {
         key:'2',
         icon:<QqOutlined />,
         label: 'QQ钱包支付通知',
+        route: 'q-pay'
     },
     {
         key: '3',
         icon: <IconFont type="icon-bytedance" />,
         label: '字节跳动担保支付通知',
+        route: 'byte-dance'
     },
     // {
     //     key: '4',
