@@ -7,9 +7,9 @@
 import "./index.css";
 import React from "react";
 import { Routes, Route, Link } from 'react-router-dom';
-import WeChat from "../WeChatPayV2";
+import WeChatPayV2 from "../WeChatPayV2";
 import QPay from "../QPay"
-import ByteDance from "../ByteDance";
+import ByteDanceGuaranteedPayment from "../ByteDanceGuaranteedPayment";
 import { Breadcrumb, Layout, Menu } from 'antd';
 import { Menu as menuList } from "../../core/menu";
 const { Sider, Content, Footer } = Layout;
@@ -36,7 +36,7 @@ class LayOut extends React.Component
                     <Menu
                         theme="dark"
                         mode="inline"
-                        defaultSelectedKeys={['1']}
+                        defaultSelectedKeys={['0']}
                     >
                         {menuList.map((item,index) => {
                             return (
@@ -81,10 +81,10 @@ class LayOut extends React.Component
                     <div
                         className="site-layout-background">
                         <Routes>
-                            <Route exact path="/" element={<WeChat />}></Route>
+                            <Route exact path="/" element={<WeChatPayV2 />}></Route>
                             <Route path="/q-pay" element={<QPay />}></Route>
-                            <Route path="/byte-dance" element={<ByteDance />}></Route>
-                            <Route path="/we-chat-v2" element={<WeChat />}></Route>
+                            <Route path="/byte-dance-guaranteed-payment" element={<ByteDanceGuaranteedPayment />}></Route>
+                            <Route path="/we-chat-pay-v2" element={<WeChatPayV2 />}></Route>
                         </Routes>
                     </div>
                     <Footer

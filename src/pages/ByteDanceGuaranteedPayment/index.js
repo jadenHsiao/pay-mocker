@@ -17,7 +17,7 @@ import {post} from "../../utils/request";
 /**
  * 字节跳动担保支付模拟组件
  */
-class ByteDance extends React.Component {
+class ByteDanceGuaranteedPayment extends React.Component {
 
     formRef = React.createRef();
 
@@ -393,4 +393,4 @@ class ByteDance extends React.Component {
 
 }
 
-export default ByteDance;
+export default ByteDanceGuaranteedPayment;
