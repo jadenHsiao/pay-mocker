@@ -29,7 +29,7 @@ npm start
 npm run build
 ```
 ## 说明
-== 本工具目前支持微信支付V2、QQ钱包支付、字节跳动小程序担保支付；所以在使用前，请先阅读对应的开发文档。==
+本工具目前支持微信支付V2、QQ钱包支付、字节跳动小程序担保支付；所以在使用前，请先阅读对应的开发文档。
 - [微信支付V2](https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_7&index=8)
 - [QQ钱包](https://mp.qpay.tenpay.cn/buss/wiki/38/1204)
 - [字节跳动担保支付](https://developer.open-douyin.com/docs/resource/zh-CN/mini-app/develop/server/ecpay/pay-list/callback/)
